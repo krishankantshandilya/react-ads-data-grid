@@ -1,0 +1,21 @@
+.filterOperatorButtonTitle {
+    width: 100%;
+    cursor: pointer;
+}
+
+.filterOperatorDropdown {
+    width: 200px;
+    padding: 10px;
+    top: 83px;
+    right: 15px;
+    left: unset;
+}
+
+.filterInput {
+    margin-top: 10px;
+}
+
+.filterUpdateBtn {
+    text-align: center;
+    margin-top: 10px;
+}
