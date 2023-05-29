@@ -6,6 +6,7 @@ import postcss from "rollup-plugin-postcss";
 import resolve from "@rollup/plugin-node-resolve";
 import svg from "rollup-plugin-svg";
 import { terser } from "rollup-plugin-terser";
+import nodePolyfills from 'rollup-plugin-node-polyfills';
 
 export default [
   {
@@ -24,6 +25,7 @@ export default [
       },
     ],
     plugins: [
+      nodePolyfills(),
       peerDepsExternal(),
       babel({
         babelHelpers: "bundled",

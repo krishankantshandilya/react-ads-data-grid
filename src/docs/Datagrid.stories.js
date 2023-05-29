@@ -1,7 +1,6 @@
 import { StylesProvider } from "@mui/styles";
 import { ThemeProvider } from "styled-components";
 import { connectorTheme } from "akeneo-design-system";
-import { Source } from "@storybook/blocks";
 import { Datagrid } from "../components";
 import rows from "../mockData";
 
@@ -137,7 +136,6 @@ export const Pagination = {
 
 export const SearchAndFilters = {
   decorators: [(story) => <Mockstore>{story()}</Mockstore>],
-  title: "test",
   args: {
     ...Default.args,
     isServerSideSearch: false,
