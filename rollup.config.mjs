@@ -25,7 +25,6 @@ export default [
       },
     ],
     plugins: [
-      nodePolyfills(),
       peerDepsExternal(),
       babel({
         babelHelpers: "bundled",
