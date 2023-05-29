@@ -55,6 +55,7 @@ export default [
       external(),
       resolve({ extensions: [".js", ".jsx", ".json"] }),
       terser(),
+      nodePolyfills(),
     ],
   },
 ];
