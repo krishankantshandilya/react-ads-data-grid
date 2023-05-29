@@ -1,5 +1,5 @@
 {
-  "name": "ads-react-data-grid",
+  "name": "react-ads-data-grid",
   "version": "0.1.2",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
