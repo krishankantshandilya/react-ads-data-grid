@@ -43,7 +43,7 @@ View [Documentation](https://www.chromatic.com/component?appId=6474affbba574942f
 npm install akeneo-design-system
 ```
 
-3. Install react-ads-data-grid
+Install react-ads-data-grid
 
 ```bash
 npm install react-ads-data-grid
