@@ -147,6 +147,9 @@ const DatagridTable = ({
     handleOnFilterChange(columnFilters);
   }, [handleOnFilterChange, columnFilters]);
 
+  useEffect(() => {
+    setCurrentPageValue(currentPage);
+  },[currentPage])
 
   return (
     <Box style={tableStyles ? { ...tableStyles } : {}}>
