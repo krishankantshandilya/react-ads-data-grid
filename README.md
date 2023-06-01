@@ -21,7 +21,7 @@ View [Documentation](https://www.chromatic.com/component?appId=6474affbba574942f
 
 ### Quick Examples
 
- - [Storybook Example](https://master--6474affbba574942f11aa134.chromatic.com/?path=/story/datagrid--draggable-rows)
+ - [Storybook Example](https://master--6474affbba574942f11aa134.chromatic.com/?path=/story/datagrid--default)
 
 ## Features
 
