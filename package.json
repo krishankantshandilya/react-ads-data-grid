@@ -1,10 +1,19 @@
 {
   "name": "react-ads-data-grid",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
   "licence": "MIT",
   "author": "Krishan Kant<kkshandilya29@gmail.com>",
+  "description": "react-ads-data-grid is a versatile npm package that provides a feature-rich data grid component for React applications. With built-in and server-side search, filter, and sort functionalities, developers can effortlessly handle large datasets while ensuring optimal performance. The package also includes actions, pagination, selectable and toolbar actions, and draggable rows, allowing for seamless interactivity and customization. With scroll and sticky headers functionality, users can easily navigate through extensive data grids while keeping important column headers visible. ",
+  "keywords": [
+    "react",
+    "react-component",
+    "react-data-grid",
+    "react-ads-data-grid",
+    "data-grid",
+    "react-table"
+  ],
   "dependencies": {
     "@emotion/react": "^11.10.8",
     "@emotion/styled": "^11.10.8",
