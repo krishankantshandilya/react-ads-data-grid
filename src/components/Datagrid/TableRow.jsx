@@ -33,7 +33,7 @@ export const TableRow = ({ headers, row, ...rest }) => {
           const type = valueType ?? "string";
           const value = row[name] ?? "";
           if (typeof renderRowCell === "function") {
-            return renderRowCell(row);
+            return renderRowCell(row, index);
           }
           return <Table.Cell key={index}>{CellValue(type, value)}</Table.Cell>;
         })}
