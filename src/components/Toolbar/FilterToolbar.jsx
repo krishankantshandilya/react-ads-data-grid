@@ -1,6 +1,6 @@
 import { Search } from "akeneo-design-system";
 import { Stack } from "@mui/material";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { ColumnFilters } from "../Filter/ColumnFilters";
 import { setSearchValue } from "../../store/slices/FilterSlice";
 
