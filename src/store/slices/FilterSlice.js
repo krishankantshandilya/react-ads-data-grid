@@ -4,6 +4,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   currentPage: 1,
   columnFilters: {},
+  searchValue: ""
 };
 
 // Actual Slice
@@ -20,8 +21,13 @@ export const FilterSlice = createSlice({
 
       return { ...state, columnFilters };
     },
+    setSearchValue: (state, action) => {
+      const { payload } = action;
+      const searchValue = payload;
+      return { ...state, searchValue };
+    }
   },
 });
 
-export const { setFilters } = FilterSlice.actions;
+export const { setFilters, setSearchValue } = FilterSlice.actions;
 export const filterReducer = FilterSlice.reducer;

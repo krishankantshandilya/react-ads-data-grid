@@ -1,7 +1,8 @@
-import { useState } from "react";
 import { Search } from "akeneo-design-system";
 import { Stack } from "@mui/material";
+import { useDispatch } from "react-redux";
 import { ColumnFilters } from "../Filter/ColumnFilters";
+import { setSearchValue } from "../../store/slices/FilterSlice";
 
 export const FilterToolbar = ({
   headers,
@@ -10,19 +11,23 @@ export const FilterToolbar = ({
   itemsCount,
   hideResultCount = false,
   hideColumnFiters = false,
-  onSearchChange = () => {},
+  onSearchChange = () => { },
 }) => {
-  const [searchText, setSearchText] = useState("");
-
+  const dispatch = useDispatch();
+  const { searchValue } = useSelector(
+    (state) => state.react_data_grid_filters
+  );
   return (
     <Search
       onSearchChange={(text) => {
-        setSearchText(text);
+        dispatch(
+          setSearchValue(text)
+        );
         onSearchChange(text);
       }}
       placeholder={placeholder}
       title={title}
-      searchValue={searchText}
+      searchValue={searchValue}
     >
       {!hideResultCount && (
         <Search.ResultCount>{`${itemsCount} results`}</Search.ResultCount>

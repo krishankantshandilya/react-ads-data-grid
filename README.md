@@ -231,8 +231,7 @@ export default function App() {
       paginationSticky={0}
       tableStyles={{}}
       filterToolbarProps={{
-        hideFilterToolbar: true,
-        displayFilterToolbar: true,
+        hideFilterToolbar: true
       }}
       currentPage={1}
       itemsPerPage={25}
