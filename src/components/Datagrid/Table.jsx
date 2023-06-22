@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Pagination, Table } from "akeneo-design-system";
 import { Box } from "@mui/material";
 import { TableHeader } from "./TableHeader";
@@ -11,8 +11,9 @@ import { filterItems } from "../../utils/filter.utils";
 import { sortItems } from "../../utils/sort.utils";
 import ExportButton from "../Toolbar/Actions/ExportsButton";
 import EmptyData from "../EmptyData";
+import { setCurrentPage } from "../../store/slices/FilterSlice";
 
-const DatagridTable = ({
+const DatagridTable = forwardRef(({
   headers = [],
   rows = [],
   searchPlaceholder = "search",
@@ -28,29 +29,25 @@ const DatagridTable = ({
   isServerSideSortable = false,
   isPaginationAllowed = false,
   isSelectable = false,
-  onSortChange,
   tableHeaderSticky,
   paginationSticky,
   tableStyles = {},
   filterToolbarProps = {
     hideFilterToolbar: true
   },
-  currentPage = 1,
   itemsPerPage = 25,
   totalItems,
-  onPageChange,
-  onSearchChange,
-  onFilterChange,
-  onRowClick = () => {},
+  onRowClick = () => { },
+  onQueryChange,
+  onRefreshQuery,
   ...rest
-}) => {
+}, ref) => {
+  const dispatch = useDispatch();
   const [data, setData] = useState(rows);
-  const { columnFilters } = useSelector(
+  const { currentPage, columnFilters, searchValue, sort } = useSelector(
     (state) => state.react_data_grid_filters
   );
-
   const totalItemsCount = !totalItems ? data.length : totalItems;
-  const [currentPageValue, setCurrentPageValue] = useState(currentPage);
   const [
     selection,
     selectionState,
@@ -61,94 +58,79 @@ const DatagridTable = ({
     selectedCount,
   ] = useSelection(totalItemsCount);
   const showToolbar = 0 < totalItemsCount && !!selectionState;
-  const indexOfLastItem = currentPageValue * itemsPerPage;
+  const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const dataItems =
-    !isServerSidePagination && isPaginationAllowed
-      ? data?.slice(indexOfFirstItem, indexOfLastItem)
-      : data;
+  const dataItems = !isServerSidePagination && isPaginationAllowed
+    ? data?.slice(indexOfFirstItem, indexOfLastItem)
+    : data;
 
   const currentPageItemsKeys = [...dataItems.keys()];
+  const firstRender = useRef(true);
+  const handleOnQueryRefresh = useCallback(() => {
+    onQueryChange({ currentPage, columnFilters, searchValue, sort });
+  }, [currentPage, columnFilters, searchValue, sort]);
 
-  const handleOnFilterChange = useCallback(
-    (filters) => {
-      if (isServerSideFiltering) {
-        if (typeof onFilterChange !== "function") {
-          throw new Error(
-            'For server side filtering, a valid function "onFilterChange" should be pass in props.'
-          );
-        }
-        onFilterChange(filters);
-      } else {
-        const filteredData = filterItems(rows, filters);
-        setData(filteredData);
-      }
-    },
-    [isServerSideFiltering, rows, onFilterChange, setData]
-  );
-
-  const handleOnSearchChange = (text) => {
-    if (isServerSideSearch) {
-      if (typeof onSearchChange !== "function") {
-        throw new Error(
-          `For server side search, a valid function "onSearchChange" should be pass in props.`
-        );
-      }
-      onSearchChange(text);
-    } else {
-      if (!searchOnField) {
-        throw new Error(
-          `To filter items based on search, a valid props "searchOnField" should be pass in props.`
-        );
-      }
-      const updatedData = filterItems(rows, columnFilters, searchOnField, text);
-      setData(updatedData);
+  useImperativeHandle(ref, () => ({
+    refreshQuery() {
+      onQueryChange({ currentPage, columnFilters, searchValue, sort });
     }
-  };
+  }));
 
   const handleOnPageChange = (page) => {
-    if (isServerSidePagination) {
-      if (typeof onPageChange !== "function") {
-        throw new Error(
-          'For server side pagination, a valid function "onPageChange" should be pass in props.'
-        );
-      }
-
-      onPageChange(page);
-    }
-
-    setCurrentPageValue(page);
+    dispatch(
+      setCurrentPage(page)
+    );
   };
 
-  const onDirectionChange = (sortProps) => {
-    if (isServerSideSortable) {
-      if (typeof onSortChange !== "function") {
-        throw new Error(
-          'For server side sorting, a valid function "onSortChange" should be pass in props.'
-        );
-      }
-
-      onSortChange(sortProps);
-    } else {
+  const sortLocalData = (sortProps) => {
+    if (typeof onQueryChange !== "function" && !isServerSideSortable) {
       const iteratees = [sortProps?.headerName ?? ""];
       const direction = sortProps?.direction === "ascending" ? "asc" : "desc";
       const orders = [direction];
       const sortedData = sortItems(data, iteratees, orders);
       setData(sortedData);
     }
-  };
+  }
+
+  const filterLocalData = (filters) => {
+    if (typeof onQueryChange !== "function" && !isServerSideFiltering) {
+      const filteredData = filterItems(rows, filters);
+      setData(filteredData);
+    }
+  }
+
+  const searchLocalData = (text) => {
+    if (typeof onQueryChange !== "function" && !isServerSideSearch) {
+      const updatedData = filterItems(rows, columnFilters, searchOnField, text);
+      setData(updatedData);
+    }
+  }
 
   useEffect(() => {
     setData(rows);
   }, [rows]);
 
   useEffect(() => {
-    handleOnFilterChange(columnFilters);
-  }, [handleOnFilterChange, columnFilters]);
+    sortLocalData(sort);
+  }, [sort])
 
   useEffect(() => {
-    setCurrentPageValue(currentPage);
-  },[currentPage])
+    filterLocalData(columnFilters);
+  }, [columnFilters])
+
+  useEffect(() => {
+    searchLocalData(searchValue);
+  }, [searchValue])
+
+  useEffect(() => {
+    if (firstRender.current) {
+      firstRender.current = false;
+      return;
+    }
+    if (typeof onQueryChange === "function") {
+      handleOnQueryRefresh()
+    }
+  }, [handleOnQueryRefresh]);
 
   return (
     <Box style={tableStyles ? { ...tableStyles } : {}}>
@@ -156,7 +138,6 @@ const DatagridTable = ({
         <FilterToolbar
           headers={headers}
           title={searchTitle}
-          onSearchChange={handleOnSearchChange}
           placeholder={searchPlaceholder}
           itemsCount={data?.length ?? 0}
           {...filterToolbarProps}
@@ -164,7 +145,7 @@ const DatagridTable = ({
       )}
       {isPaginationAllowed && (
         <Pagination
-          currentPage={currentPageValue}
+          currentPage={currentPage}
           itemsPerPage={itemsPerPage}
           totalItems={totalItemsCount}
           sticky={paginationSticky}
@@ -181,7 +162,6 @@ const DatagridTable = ({
           <TableHeader
             headers={headers}
             sticky={tableHeaderSticky}
-            onDirectionChange={onDirectionChange}
           />
           <Table.Body>
             {dataItems.map((row, index) => (
@@ -240,6 +220,6 @@ const DatagridTable = ({
       )}
     </Box>
   );
-};
+});
 
 export default DatagridTable;

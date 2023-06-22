@@ -17,10 +17,6 @@ export const TableHeaderCell = ({ children, ...rest }) => {
   return <Table.HeaderCell {...restProps}>{children}</Table.HeaderCell>;
 };
 
-TableHeaderCell.defaultProps = {
-  isSortable: false,
-};
-
 TableHeaderCell.propTypes = {
   isSortable: PropTypes.bool,
   onDirectionChange: PropTypes.func,

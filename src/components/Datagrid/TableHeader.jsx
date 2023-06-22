@@ -1,26 +1,27 @@
-import { useState } from "react";
 import { Table } from "akeneo-design-system";
 import PropTypes from "prop-types";
 import { TableHeaderCell } from "./TableHeaderCell";
+import { useDispatch, useSelector } from "react-redux";
+import { setSort } from "../../store/slices/FilterSlice";
 
 export const TableHeader = ({
   sticky,
   headers,
-  onDirectionChange,
   ...rest
 }) => {
-  const [sortDirection, setSortDirection] = useState({});
+  const dispatch = useDispatch();
+  const { sort } = useSelector(
+    (state) => state.react_data_grid_filters
+  );
 
   const onSortChangeHandler = (direction, headerName) => {
-    setSortDirection((prevState) => ({
-      ...prevState,
-      [headerName]: direction,
-    }));
-
-    onDirectionChange({
-      direction,
-      headerName,
-    });
+    dispatch(
+      setSort({
+        headerName,
+        direction
+      }
+      )
+    );
   };
 
   const TableHeaderCells = () => {
@@ -28,6 +29,7 @@ export const TableHeader = ({
       <Table.Header sticky={sticky}>
         {headers.map((header, index) => {
           const { name, label } = header;
+          const sortDirection = sort?.headerName === name ? sort.direction : "none";
 
           return (
             <TableHeaderCell
@@ -37,7 +39,7 @@ export const TableHeader = ({
               }
               {...header}
               {...rest}
-              sortDirection={sortDirection?.[name] ?? "none"}
+              sortDirection={sortDirection}
             >
               {label}
             </TableHeaderCell>
