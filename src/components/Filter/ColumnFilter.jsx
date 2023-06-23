@@ -18,6 +18,8 @@ import StringFilter from "./StringFilter";
 import { SupportedFilter } from "./SupportedFilter.js";
 import { setFilters } from "../../store/slices/FilterSlice";
 import filterStyles from "./filter.module.css";
+import SelectFilter from "./SelectFilter";
+import IdentifierFilter from "./IdentifierFilter";
 
 const ColumnFilter = ({
   name,
@@ -26,6 +28,8 @@ const ColumnFilter = ({
   operator,
   filterType = "string",
   dateFormat = "yyyy/MM/dd",
+  options = [],
+  multiple = false
 }) => {
   if (!SupportedFilter.includes(filterType)) {
     throw new Error(`${filterType} is not a valid filter type.`);
@@ -50,14 +54,19 @@ const ColumnFilter = ({
   };
 
   const onUpdate = () => {
+    const filter = {
+      [name]: {
+        name,
+        operator: filterOperator
+      },
+    }
+    
+    if (!hideInput) {
+      filter[name].value = inputValue;
+    }
+
     dispatch(
-      setFilters({
-        [name]: {
-          name,
-          operator: filterOperator,
-          value: inputValue,
-        },
-      })
+      setFilters(filter)
     );
     close();
   };
@@ -87,6 +96,12 @@ const ColumnFilter = ({
     case "date":
       FilterComponent = DateFilter;
       break;
+    case "identifier":
+      FilterComponent = IdentifierFilter;
+      break;
+    case "select":
+      FilterComponent = SelectFilter;
+      break;
     default:
       FilterComponent = StringFilter;
   }
@@ -108,6 +123,7 @@ const ColumnFilter = ({
           >
             <FilterUpdateCard
               label={label}
+              filterType={filterType}
               operator={filterOperator}
               onUpdate={onUpdate}
               onClickOperator={onClickOperator}
@@ -119,6 +135,8 @@ const ColumnFilter = ({
                   operator={filterOperator}
                   dateFormat={dateFormat}
                   onValueChange={onValueChange}
+                  options={options}
+                  multiple={multiple}
                 />
               )}
             </FilterUpdateCard>

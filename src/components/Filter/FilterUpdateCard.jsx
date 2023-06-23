@@ -5,6 +5,7 @@ import filterStyles from "./filter.module.css";
 
 const FilterUpdateCard = ({
   label,
+  filterType,
   operator,
   onClickOperator,
   onUpdate,
@@ -13,7 +14,7 @@ const FilterUpdateCard = ({
   return (
     <>
       <FilterCard title={label}>
-        <Operators operator={operator} onClickOperator={onClickOperator} />
+        <Operators filterType={filterType} operator={operator} onClickOperator={onClickOperator} />
       </FilterCard>
       {children}
       <div className={filterStyles["filterUpdateBtn"]}>

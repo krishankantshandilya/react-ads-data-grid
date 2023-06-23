@@ -1,16 +1,19 @@
-const hideInputOperatorTypes = ["true", "false", "IS NOT NULL", "IS NULL"];
+const hideInputOperatorTypes = ["true", "false", "NOT EMPTY", "EMPTY"];
 
 const selectTypeOperators = ["IN", "NOT IN"];
 
 const operatorTypes = {
+  CONTAINS: "Contains",
+  "DOES NOT CONTAIN": "Does not contain",
+  "STARTS WITH": "Starts with",
   true: "Yes",
   false: "No",
   BETWEEN: "Between",
   "NOT BETWEEN": "Not between",
   IN: "In list",
   "NOT IN": "Not in list",
-  "IS NOT NULL": "Is not empty",
-  "IS NULL": "Is empty",
+  "NOT EMPTY": "Is not empty",
+  "EMPTY": "Is empty",
   "<": "<",
   ">": ">",
   ">=": ">=",
@@ -19,18 +22,38 @@ const operatorTypes = {
   "!=": "Not equal to",
 };
 
-const stringFilterOperators = [
-  "IN",
-  "NOT IN",
+const identifierFilterOperators = [
+  "CONTAINS",
+  "DOES NOT CONTAIN",
+  "STARTS WITH",
   "=",
   "!=",
-  "IS NOT NULL",
-  "IS NULL",
+  "IN",
+  "NOT IN",
+  "NOT EMPTY",
+  "EMPTY"
 ];
+
+const stringFilterOperators = [
+  "CONTAINS",
+  "DOES NOT CONTAIN",
+  "STARTS WITH",
+  "=",
+  "!=",
+  "NOT EMPTY",
+  "EMPTY",
+];
+
+const selectFilterOperator = [
+  "IN",
+  "NOT IN",
+  "NOT EMPTY",
+  "EMPTY",
+]
 
 const numberFilterOperators = ["=", "!=", "<", ">", ">=", "<="];
 
-const dateFilterOperators = ["BETWEEN", "NOT BETWEEN", "<", ">"];
+const dateFilterOperators = ["BETWEEN", "NOT BETWEEN", "=", "!=", "<", ">", "NOT EMPTY", "EMPTY"];
 
 const booleanFilterOperators = [true, false];
 
@@ -42,6 +65,10 @@ const operatorsTypeList = (operatorsType) => {
       return booleanFilterOperators;
     case "date":
       return dateFilterOperators;
+    case "identifier":
+      return identifierFilterOperators;
+    case "select":
+      return selectFilterOperator;
     default:
       return stringFilterOperators;
   }
@@ -55,5 +82,7 @@ export {
   dateFilterOperators,
   booleanFilterOperators,
   selectTypeOperators,
+  identifierFilterOperators,
+  selectFilterOperator,
   operatorsTypeList,
 };

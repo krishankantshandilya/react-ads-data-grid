@@ -6,7 +6,7 @@ const AutoCompleteInput = ({ ...rest }) => {
     <Autocomplete
       renderTags={(value, getTagProps) =>
         value.map((option, index) => (
-          <Chip label={option} {...getTagProps({ index })} />
+          <Chip key={index} label={option} {...getTagProps({ index })} />
         ))
       }
       renderInput={(params) => <TextField {...params} />}

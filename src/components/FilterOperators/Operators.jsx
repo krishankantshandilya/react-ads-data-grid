@@ -2,11 +2,10 @@ import { Dropdown, useBooleanState } from "akeneo-design-system";
 import { operatorTypes, operatorsTypeList } from ".";
 import { SwitcherButton } from "../Filter/Component";
 
-export const Operators = ({ operator, onClickOperator }) => {
+export const Operators = ({ filterType, operator, onClickOperator }) => {
   const [isOpen, open, close] = useBooleanState(false);
-
-  const supportedOperatorsTypeList = operatorsTypeList();
-
+  const supportedOperatorsTypeList = operatorsTypeList(filterType);
+  
   return (
     <Dropdown>
       <SwitcherButton label="" onClick={open} showArrow={true}>

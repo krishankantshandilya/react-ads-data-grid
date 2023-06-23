@@ -1,1 +1,1 @@
-export const SupportedFilter = ["string", "boolean", "number", "date"]
+export const SupportedFilter = ["string", "boolean", "number", "date", "select", "identifier"]

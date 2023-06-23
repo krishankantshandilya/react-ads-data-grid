@@ -107,10 +107,6 @@ const DatagridTable = forwardRef(({
   }
 
   useEffect(() => {
-    setData(rows);
-  }, [rows]);
-
-  useEffect(() => {
     sortLocalData(sort);
   }, [sort])
 

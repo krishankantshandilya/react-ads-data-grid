@@ -32,7 +32,11 @@ export const FilterCard = ({ children, title, ...rest }) => {
   return (
     <Container {...rest}>
       <CardContainer>
-        <Dropdown.Title>{title}</Dropdown.Title>
+        <Dropdown.Title>
+          <div style={{ whiteSpace: "normal" }}>
+            {title}
+          </div>
+        </Dropdown.Title>
       </CardContainer>
       {children}
     </Container>
