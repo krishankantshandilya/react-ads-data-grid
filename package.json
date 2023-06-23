@@ -1,6 +1,6 @@
 {
   "name": "react-ads-data-grid",
-  "version": "0.1.10",
+  "version": "0.2.0",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
   "licence": "MIT",
