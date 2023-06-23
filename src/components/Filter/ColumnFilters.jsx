@@ -95,7 +95,7 @@ export const ColumnFilters = ({ headers }) => {
               {headers
                 .filter((header) => header.isFilterable)
                 .map((header, index) => {
-                  const filter = columnFilters?.[header.name];
+                  const filter = columnFilters?.[header.filterName];
                   const value = (filter && filter.value) ?? "";
                   const operator = (filter && filter.operator) ?? "";
 
@@ -105,6 +105,7 @@ export const ColumnFilters = ({ headers }) => {
                         value={value}
                         operator={operator}
                         {...header}
+                        name={header.filterName}
                       />
                     </ListItem>
                   );

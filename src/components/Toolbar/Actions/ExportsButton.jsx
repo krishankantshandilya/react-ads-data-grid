@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { utils, writeFile } from "xlsx";
+import _ from "lodash";
 import papaParse from "papaparse";
 import {
   Button,
@@ -29,7 +30,7 @@ const ExportButton = ({ headers, items, selection = [] }) => {
     const dataToExport = [];
     const exportableHeaders = headers.filter((header) => header?.isExportable);
     const headersToExport = exportableHeaders.map(
-      (header) => header?.label ?? header.name
+      (header) => header?.exportColumnName ?? header?.name
     );
     if (headersToExport?.length > 0) {
       const itemsToExport =
@@ -39,9 +40,9 @@ const ExportButton = ({ headers, items, selection = [] }) => {
       itemsToExport.forEach((itemToExport) => {
         const filterItemData = {};
         exportableHeaders.forEach((exportableHeader) => {
-          const dataKey = exportableHeader?.label ?? exportableHeader.name;
+          const dataKey = exportableHeader?.exportColumnName ?? exportableHeader.name;
           filterItemData[dataKey] = exportableHeader.name
-            ? itemToExport?.[exportableHeader.name] ?? ""
+            ? _.get(itemToExport, exportableHeader.name) ?? ""
             : "";
         });
 

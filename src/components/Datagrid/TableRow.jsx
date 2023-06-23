@@ -1,4 +1,5 @@
 import { Badge, Image, Table } from "akeneo-design-system";
+import _ from "lodash";
 
 export const TableRow = ({ headers, row, ...rest }) => {
   const CellValue = (valueType, value) => {
@@ -31,7 +32,7 @@ export const TableRow = ({ headers, row, ...rest }) => {
         {headers.map((header, index) => {
           const { name, valueType, renderRowCell } = header;
           const type = valueType ?? "string";
-          const value = row[name] ?? "";
+          const value = _.get(row, name) ?? "";
           if (typeof renderRowCell === "function") {
             return renderRowCell(row, index);
           }
